@@ -1,7 +1,9 @@
 name: semver
-version: 0.1.0
+version: 0.1.1
 
 authors:
-  - mosop <mosop@a.b.com>
+  - mosop
 
 license: MIT
+
+crystal: 0.21.0

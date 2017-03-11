@@ -22,7 +22,7 @@ struct Semver
   @string : String?
   def string
     @string ||= source || begin
-      s = [mojor, minor, patch].join(".")
+      s = [major, minor, patch].join(".")
       s += "-#{prerelease}" if prerelease
       s += "+#{build}" if build
       s
