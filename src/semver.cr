@@ -4,14 +4,13 @@ struct Semver
   include Comparable(self)
   include Comparable(String)
 
-  getter source : String?
   getter major : Int32
   getter minor : Int32
   getter patch : Int32
   getter prerelease : String?
   getter build : String?
 
-  def initialize(@major, @minor, @patch, @prerelease, @build, @source = nil)
+  def initialize(@major, @minor, @patch, @prerelease, @build, @string = nil)
   end
 
   def self.parse(string)
@@ -21,12 +20,37 @@ struct Semver
 
   @string : String?
   def string
-    @string ||= source || begin
+    @string ||= begin
       s = [major, minor, patch].join(".")
       s += "-#{prerelease}" if prerelease
       s += "+#{build}" if build
       s
     end
+  end
+
+  def major=(v)
+    @string = nil
+    @major = v
+  end
+
+  def minor=(v)
+    @string = nil
+    @minor = v
+  end
+
+  def patch=(v)
+    @string = nil
+    @patch = v
+  end
+
+  def prerelease=(v)
+    @string = nil
+    @prerelease = v
+  end
+
+  def build=(v)
+    @string = nil
+    @build = v
   end
 
   @prerelease_components : Array(String | Int32)?
@@ -86,5 +110,26 @@ struct Semver
     compare(a[0], b[0]) do
       compare(a[1..-1], b[1..-1])
     end
+  end
+
+  def major!
+    self.major = major + 1
+    self.minor = 0
+    self.patch = 0
+    self.prerelease = nil
+    self.build = nil
+  end
+
+  def minor!
+    self.minor = minor + 1
+    self.patch = 0
+    self.prerelease = nil
+    self.build = nil
+  end
+
+  def patch!
+    self.patch = patch + 1
+    self.prerelease = nil
+    self.build = nil
   end
 end
