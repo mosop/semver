@@ -28,28 +28,45 @@ struct Semver
     end
   end
 
+  @short_string : String?
+  def short_string
+    @short_string ||= begin
+      a = [major, minor]
+      a << patch if patch > 0
+      s = a.join(".")
+      s += "-#{prerelease}" if prerelease
+      s += "+#{build}" if build
+      s
+    end
+  end
+
   def major=(v)
     @string = nil
+    @short_string = nil
     @major = v
   end
 
   def minor=(v)
     @string = nil
+    @short_string = nil
     @minor = v
   end
 
   def patch=(v)
     @string = nil
+    @short_string = nil
     @patch = v
   end
 
   def prerelease=(v)
     @string = nil
+    @short_string = nil
     @prerelease = v
   end
 
   def build=(v)
     @string = nil
+    @short_string = nil
     @build = v
   end
 
