@@ -13,8 +13,10 @@ struct Semver
   def initialize(@major, @minor, @patch, @prerelease, @build, @string = nil)
   end
 
+  PATTERN = /^(\d+)(?:\.(\d+)(?:\.(\d+))?)?(?:-([0-9A-Za-z-]+(?:\.[0-9A-Za-z-]+)*))?(?:\+([0-9A-Za-z.-]+))?$/
+
   def self.parse(string)
-    raise ArgumentError.new("Wrong semver syntax: #{string}") unless string =~ /^(\d+)(?:\.(\d+)(?:\.(\d+)(?:-([0-9A-Za-z-]+(?:\.[0-9A-Za-z-]+)*))?(?:\+([0-9A-Za-z.-]+))?)?)?$/
+    raise ArgumentError.new("Wrong semver syntax: #{string}") unless PATTERN =~ string
     new($1.to_i, $2?.try(&.to_i) || 0, $3?.try(&.to_i) || 0, $4?, $5?, string)
   end
 
@@ -32,7 +34,7 @@ struct Semver
   def short_string
     @short_string ||= begin
       a = [major, minor]
-      a << patch if patch > 0
+      a << patch if patch > 0 || major == 0
       s = a.join(".")
       s += "-#{prerelease}" if prerelease
       s += "+#{build}" if build
